@@ -2,7 +2,7 @@ package org.example.springboot_db.services;
 
 import org.example.springboot_db.dto.StudentRequest;
 import org.example.springboot_db.dto.StudentResponse;
-import org.example.springboot_db.entity.Students;
+import org.example.springboot_db.entity.Student;
 import org.example.springboot_db.exceptions.ResourceNotFoundException;
 import org.example.springboot_db.exceptions.DuplicateResourceException;
 import org.example.springboot_db.repository.StudentRepository;
@@ -33,12 +33,12 @@ public class StudentService {
             );
         }
 
-        Students student = new Students();
+        Student student = new Student();
         student.setFirstName(request.firstName());
         student.setLastName(request.lastName());
         student.setEmail(request.email());
 
-        Students savedStudent = studentRepository.save(student);
+        Student savedStudent = studentRepository.save(student);
 
         return mapToResponse(savedStudent);
     }
@@ -57,7 +57,7 @@ public class StudentService {
     @Transactional(readOnly = true)
     public StudentResponse getStudentById(Long id) {
 
-        Students student = findStudentOrThrow(id);
+        Student student = findStudentOrThrow(id);
 
         return mapToResponse(student);
     }
@@ -66,7 +66,7 @@ public class StudentService {
     @Transactional
     public StudentResponse updateStudent(Long id, StudentRequest request) {
 
-        Students student = findStudentOrThrow(id);
+        Student student = findStudentOrThrow(id);
 
         boolean emailUsedByAnotherStudent =
                 studentRepository.existsByEmailAndIdNot(
@@ -84,7 +84,7 @@ public class StudentService {
         student.setLastName(request.lastName());
         student.setEmail(request.email());
 
-        Students updatedStudent = studentRepository.save(student);
+        Student updatedStudent = studentRepository.save(student);
 
         return mapToResponse(updatedStudent);
     }
@@ -93,12 +93,12 @@ public class StudentService {
     @Transactional
     public void deleteStudent(Long id) {
 
-        Students student = findStudentOrThrow(id);
+        Student student = findStudentOrThrow(id);
 
         studentRepository.delete(student);
     }
 
-    private Students findStudentOrThrow(Long id) {
+    private Student findStudentOrThrow(Long id) {
 
         return studentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
@@ -106,7 +106,7 @@ public class StudentService {
                 ));
     }
 
-    private StudentResponse mapToResponse(Students student) {
+    private StudentResponse mapToResponse(Student student) {
 
         return new StudentResponse(
                 student.getId(),
