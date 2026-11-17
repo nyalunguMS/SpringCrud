@@ -18,4 +18,6 @@ public record StudentRequest(
         @Size(max = 255, message = "Email must not exceed 255 characters")
         String email
 ) {
+
+
 }
